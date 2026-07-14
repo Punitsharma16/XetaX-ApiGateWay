@@ -8,8 +8,11 @@ import java.util.List;
 public class RouteValidator {
 
     public static final List<String> OPEN_API_ENDPOINT = List.of(
-            "/api/v1/auth/**",
-            "/actuator/**"
+            "/auth/v1/login",
+            "/auth/v1/register",
+            "/auth/v1/refresh-token",
+            "/auth/api/v1/users/",
+            "/actuator"
     );
 
     public boolean isSecured(String requestPath) {

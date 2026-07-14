@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasicSpec -> httpBasicSpec.disable())
                 .logout(logoutSpec -> logoutSpec.disable())
                 .authorizeExchange(exchangeSpec -> exchangeSpec
-                        .pathMatchers("/api/v1/auth/**").permitAll()
+                        .pathMatchers("/auth/v1**").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
                         .anyExchange().permitAll()
                 )

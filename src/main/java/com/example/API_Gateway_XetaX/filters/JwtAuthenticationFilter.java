@@ -3,6 +3,7 @@ package com.example.API_Gateway_XetaX.filters;
 import com.example.API_Gateway_XetaX.security.JwtService;
 import com.example.API_Gateway_XetaX.utils.ResponseUtil;
 import io.jsonwebtoken.Claims;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -20,10 +21,17 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
     private final JwtService jwtService;
     private final RouteValidator routeValidator;
-
+    @PostConstruct
+    public void init() {
+        System.out.println("JwtAuthenticationFilter Loaded");
+    }
     @Override
     public Mono<Void> filter(ServerWebExchange exchange,
                              GatewayFilterChain chain) {
+
+        System.out.println("========== Gateway ==========");
+        System.out.println(exchange.getRequest().getMethod());
+        System.out.println(exchange.getRequest().getURI());
 
         String path = exchange.getRequest().getPath().value();
 
