@@ -54,9 +54,7 @@ management:
   endpoint:
     health:
       show-details: always
-
 logging:
   level:
-    root: INFO
-    org.springframework.cloud.gateway: INFO
-    com.example.API_Gateway_XetaX: DEBUG
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty.http.server: DEBUG
