@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX.filters;
+package com.xetaX.apigateway.filters;
 
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import java.util.List;
 public class RouteValidator {
 
     public static final List<String> OPEN_API_ENDPOINT = List.of(
-            "/api/v1/auth/**",
+            "/auth/auth/v1/**",
             "/actuator/**"
     );
 

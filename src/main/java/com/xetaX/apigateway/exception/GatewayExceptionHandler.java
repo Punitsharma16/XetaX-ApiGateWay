@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX.exception;
+package com.xetaX.apigateway.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;

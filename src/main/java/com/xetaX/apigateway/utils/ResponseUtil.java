@@ -1,6 +1,6 @@
-package com.example.API_Gateway_XetaX.utils;
+package com.xetaX.apigateway.utils;
 
-import com.example.API_Gateway_XetaX.exception.ErrorResponse;
+import com.xetaX.apigateway.exception.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;

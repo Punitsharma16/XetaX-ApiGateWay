@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX;
+package com.xetaX.apigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

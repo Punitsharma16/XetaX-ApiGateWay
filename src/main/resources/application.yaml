@@ -21,7 +21,7 @@ spring:
           routes:
 
             - id: auth-service
-              uri: lb://AUTH-SERVICE
+              uri: lb://Authentication-XETAX
               predicates:
                 - Path=/auth/**
 
@@ -29,11 +29,6 @@ spring:
               uri: lb://AI-SERVICE
               predicates:
                 - Path=/ai/**
-
-            - id: notification-service
-              uri: lb://NOTIFICATION-SERVICE
-              predicates:
-                - Path=/notification/**
 
 eureka:
   client:

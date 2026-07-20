@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX;
+package com.xetaX.apigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

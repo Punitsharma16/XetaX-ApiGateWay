@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX.config;
+package com.xetaX.apigateway.config;
 
 
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .httpBasic(httpBasicSpec -> httpBasicSpec.disable())
                 .logout(logoutSpec -> logoutSpec.disable())
                 .authorizeExchange(exchangeSpec -> exchangeSpec
-                        .pathMatchers("/api/v1/auth/**").permitAll()
+                        .pathMatchers("auth/auth/v1/**").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
                         .anyExchange().permitAll()
                 )

@@ -1,7 +1,7 @@
-package com.example.API_Gateway_XetaX.filters;
+package com.xetaX.apigateway.filters;
 
-import com.example.API_Gateway_XetaX.security.JwtService;
-import com.example.API_Gateway_XetaX.utils.ResponseUtil;
+import com.xetaX.apigateway.security.JwtService;
+import com.xetaX.apigateway.utils.ResponseUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         String path = exchange.getRequest().getPath().value();
 
         // Skip public APIs
-        if (!routeValidator.isSecured(path)) {
+        if (routeValidator.isSecured(path)) {
             return chain.filter(exchange);
         }
 
@@ -37,9 +37,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
                 .getFirst(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-
             log.warn("Authorization header missing for {}", path);
-
             return ResponseUtil.writeErrorResponse(
                     exchange,
                     HttpStatus.UNAUTHORIZED,
@@ -48,9 +46,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         }
 
         String token = authHeader.substring(7);
-
         if (!jwtService.validateToken(token)) {
-
             log.warn("Invalid JWT token");
 
             return ResponseUtil.writeErrorResponse(
@@ -61,9 +57,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         }
 
         if (!jwtService.validateToken(token)) {
-
             log.warn("Refresh token used instead of access token.");
-
             return ResponseUtil.writeErrorResponse(
                     exchange,
                     HttpStatus.UNAUTHORIZED,
@@ -77,7 +71,6 @@ public class JwtAuthenticationFilter implements GlobalFilter {
                 .request(exchange.getRequest().mutate()
                         .header("X-User-Id", claims.getSubject())
                         .header("X-User-Email", claims.get("user", String.class))
-                        // Uncomment after Auth Service starts sending roles
                         //.header("X-User-Role", String.join(",", jwtService.getRoles(token)))
                         .build())
                 .build();

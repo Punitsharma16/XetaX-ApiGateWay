@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX.filters;
+package com.xetaX.apigateway.filters;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

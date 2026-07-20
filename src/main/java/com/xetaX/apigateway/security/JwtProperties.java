@@ -1,4 +1,4 @@
-package com.example.API_Gateway_XetaX.security;
+package com.xetaX.apigateway.security;
 
 
 import lombok.Getter;
