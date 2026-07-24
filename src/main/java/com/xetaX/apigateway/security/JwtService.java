@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private JwtProperties jwtProperties;
+    private final JwtProperties jwtProperties;
 
     private SecretKey getSigningKey() {
         String key = jwtProperties.getSecretKey();

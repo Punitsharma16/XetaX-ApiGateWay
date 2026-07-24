@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         String path = exchange.getRequest().getPath().value();
 
         // Skip public APIs
-        if (routeValidator.isSecured(path)) {
+        if (!routeValidator.isSecured(path)) {
             return chain.filter(exchange);
         }
 
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         }
 
         String token = authHeader.substring(7);
-        if (!jwtService.validateToken(token)) {
+        if (token.isBlank()) {
             log.warn("Invalid JWT token");
 
             return ResponseUtil.writeErrorResponse(
@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
             );
         }
 
-        if (!jwtService.validateToken(token)) {
+        if (token.isBlank()) {
             log.warn("Refresh token used instead of access token.");
             return ResponseUtil.writeErrorResponse(
                     exchange,
@@ -72,15 +72,71 @@ public class JwtAuthenticationFilter implements GlobalFilter {
                     "Access token required."
             );
         }
+             Claims claims;
+        try {
+            /*
+             * Signature, issuer and expiration validation.
+             */
+            claims = jwtService.getClaims(token);
 
-        Claims claims = jwtService.getClaims(token);
+        } catch (Exception exception) {
+
+            log.warn(
+                    "JWT validation failed: path={}, reason={}",
+                    path,
+                    exception.getMessage()
+            );
+
+            return ResponseUtil.writeErrorResponse(
+                    exchange,
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid or expired access token."
+            );
+        }
+
+        String tokenType = claims.get("typ", String.class);
+        if(!"access".equalsIgnoreCase(tokenType)){
+         return ResponseUtil.writeErrorResponse( exchange,
+                 HttpStatus.UNAUTHORIZED,
+                 "Access token is required.");
+        }
+        String userId=claims.getSubject();
+        String email = claims.get("user", String.class);
+        String role = claims.get("role", String.class);
+
+        if (userId == null || userId.isBlank()) {
+
+            return ResponseUtil.writeErrorResponse(
+                    exchange,
+                    HttpStatus.UNAUTHORIZED,
+                    "User ID is missing from access token."
+            );
+        }
+
 
         ServerWebExchange mutatedExchange = exchange.mutate()
-                .request(exchange.getRequest().mutate()
-                        .header("X-User-Id", claims.getSubject())
-                        .header("X-User-Email", claims.get("user", String.class))
-                        //.header("X-User-Role", String.join(",", jwtService.getRoles(token)))
-                        .build())
+                .request(request -> request.headers(headers -> {
+
+                    /*
+                     * UI se aaye fake identity headers remove karo.
+                     */
+                    headers.remove("X-User-Id");
+                    headers.remove("X-User-Email");
+                    headers.remove("X-User-Role");
+
+                    /*
+                     * Verified JWT claims se headers add karo.
+                     */
+                    headers.set("X-User-Id", userId);
+
+                    if (email != null && !email.isBlank()) {
+                        headers.set("X-User-Email", email);
+                    }
+
+                    if (role != null && !role.isBlank()) {
+                        headers.set("X-User-Role", role);
+                    }
+                }))
                 .build();
 
         log.debug("JWT verified successfully for user {}", claims.getSubject());

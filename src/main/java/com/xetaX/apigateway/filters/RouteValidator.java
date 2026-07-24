@@ -8,7 +8,9 @@ import java.util.List;
 public class RouteValidator {
 
     public static final List<String> OPEN_API_ENDPOINT = List.of(
-            "/auth/auth/v1/**",
+            "/auth/v1/login",
+            "/auth/v1/register",
+            "/auth/v1/refresh",
             "/actuator/**"
     );
 
